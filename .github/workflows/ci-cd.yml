@@ -1,59 +1,61 @@
 name: CI/CD Pipeline
 
-#quando o pipeline será disparado
+# Quando o pipepline será disparado
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
-#Permissões necessarias para publicar no wr
+# Permissões necessárias para publicar no Github Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
 jobs:
-#JOB 1 - CI - Integração/Verificações
-  ci:
-    name: CI - Test e Validação
-    runs-on: ubunto-la
+  # JOB 1 - CI - Integração Continua (Testes)
+  ci: 
+    name: CI - Testes e Validação
+    runs-on: ubuntu-latest
     steps:
-      - name: Chekout de código
+      - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Configirar Node.js
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-versions: '20'
+          node-versions: '20'  
 
       - name: Instalar HTMLHint (linter de HTML)
         run: npm install -g htmlhint
 
-      - name: Validar sintexe do HTML
+      - name: Validar sintaxe do HTML
         run: htmlhint index.html
- 
-#JOB 2 CD - Entrega Continua (Deploy)
+    
+# JOB 2 - CD: Entrega Continua (Deploy)
   cd:
     name: CD - Deploy no Github Pages
     needs: ci
     if: github.ref == 'refs/heads/main'
-    runs-on: ubunto-latest
+    runs-on: ubuntu-latest
 
     environment:
-    name: github-pages
-    url: ${{ steps.deployment.outputs.page_url }}
-
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
     steps:
       - name: Checkout do Código
+        uses: actions/checkout@v4
+      
+      - name: Configurar Github Pages
         uses: actions/configure-pages@v4
 
       - name: Empacotar artefato
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
-
-      - name: Publicar no github pages
+      
+      - name: Publicar no Github pages
         id: deployment
         uses: actions/deploy-pages@v4
-        
