@@ -34,26 +34,26 @@ jobs:
         run: htmlhint index.html
  
 #JOB 2 CD - Entrega Continua (Deploy)
-cd:
-    name: CD - Deploy no Github Pages
-    needs: ci
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubunto-latest
+  cd:
+      name: CD - Deploy no Github Pages
+      needs: ci
+      if: github.ref == 'refs/heads/main'
+      runs-on: ubunto-latest
 
-    environment:
-    name: github-pages
-    url: ${{ steps.deployment.outputs.page_url }}
+      environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
-    steps:
-    - name: Checkout do Código
-      uses: actions/configure-pages@v4
+      steps:
+      - name: Checkout do Código
+        uses: actions/configure-pages@v4
 
-    - name: Empacotar artefato
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: '.'
+      - name: Empacotar artefato
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
 
-    - name: Publicar no github pages
-      id: deployment
-      uses: actions/deploy-pages@v4
-      
+      - name: Publicar no github pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        
