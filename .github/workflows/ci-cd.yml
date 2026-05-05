@@ -16,9 +16,9 @@ permissions:
 jobs:
 #JOB 1 - CI - Integração/Verificações
   ci:
-      name: CI - Test e Validação
-      runs-on: ubunto-la
-      steps:
+    name: CI - Test e Validação
+    runs-on: ubunto-la
+    steps:
       - name: Chekout de código
         uses: actions/checkout@v4
 
@@ -35,16 +35,16 @@ jobs:
  
 #JOB 2 CD - Entrega Continua (Deploy)
   cd:
-      name: CD - Deploy no Github Pages
-      needs: ci
-      if: github.ref == 'refs/heads/main'
-      runs-on: ubunto-latest
+    name: CD - Deploy no Github Pages
+    needs: ci
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubunto-latest
 
-      environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    environment:
+    name: github-pages
+    url: ${{ steps.deployment.outputs.page_url }}
 
-      steps:
+    steps:
       - name: Checkout do Código
         uses: actions/configure-pages@v4
 
