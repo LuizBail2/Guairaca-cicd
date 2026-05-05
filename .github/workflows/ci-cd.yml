@@ -16,44 +16,44 @@ permissions:
 jobs:
 #JOB 1 - CI - Integração/Verificações
   ci:
-    name: CI - Test e Validação
-    runs-on: ubunto-la
-    steps:
-     - name: Chekout de código
-       uses: actions/checkout@v4
+      name: CI - Test e Validação
+      runs-on: ubunto-la
+      steps:
+      - name: Chekout de código
+        uses: actions/checkout@v4
 
-     - name: Configirar Node.js
-       uses: actions/setup-node@v4
-       with:
-        node-versions: '20'
+      - name: Configirar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-versions: '20'
 
-     - name: Instalar HTMLHint (linter de HTML)
-       run: npm install -g htmlhint
+      - name: Instalar HTMLHint (linter de HTML)
+        run: npm install -g htmlhint
 
-     - name: Validar sintexe do HTML
-       run: htmlhint index.html
+      - name: Validar sintexe do HTML
+        run: htmlhint index.html
  
 #JOB 2 CD - Entrega Continua (Deploy)
 cd:
-  name: CD - Deploy no Github Pages
-  needs: ci
-  if: github.ref == 'refs/heads/main'
-  runs-on: ubunto-latest
+    name: CD - Deploy no Github Pages
+    needs: ci
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubunto-latest
 
-  environment:
-   name: github-pages
-   url: ${{ steps.deployment.outputs.page_url }}
+    environment:
+    name: github-pages
+    url: ${{ steps.deployment.outputs.page_url }}
 
-  steps:
-   - name: Checkout do Código
-     uses: actions/configure-pages@v4
+    steps:
+    - name: Checkout do Código
+      uses: actions/configure-pages@v4
 
-   - name: Empacotar artefato
-     uses: actions/upload-pages-artifact@v3
-     with:
-      path: '.'
+    - name: Empacotar artefato
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: '.'
 
-   - name: Publicar no github pages
-     id: deployment
-     uses: actions/deploy-pages@v4
-    
+    - name: Publicar no github pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+      
